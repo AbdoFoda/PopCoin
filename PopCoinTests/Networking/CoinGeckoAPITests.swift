@@ -22,7 +22,8 @@ final class CoinGeckoAPITests: XCTestCase {
         session = URLSession(configuration: config)
 
         sut = CoinGeckoAPI(session: session,
-                           coinID: CoinGeckoConstants.Coin.bitcoin, currency: CoinGeckoConstants.Currency.eur
+                           coinID: CoinGeckoConstants.Coin.bitcoin,
+                           currency: CoinGeckoConstants.Currency.eur
         ) // Injected session for testing
     }
 
@@ -55,8 +56,7 @@ final class CoinGeckoAPITests: XCTestCase {
         }
 
         // When
-        let result = try await sut.fetchLast14DaysEUR()
-
+        let result = try await sut.fetchHistoricalPrices(days: 14)
         // Then
         XCTAssertEqual(result.count, 2)
         XCTAssertEqual(result.first?.priceEUR, 64312.12)
@@ -78,7 +78,7 @@ final class CoinGeckoAPITests: XCTestCase {
         }
 
         do {
-            _ = try await sut.fetchLast14DaysEUR()
+            _ = try await sut.fetchHistoricalPrices(days: 14)
             XCTFail("Expected decoding error")
         } catch {
             XCTAssertTrue(error is DecodingError)
@@ -91,7 +91,7 @@ final class CoinGeckoAPITests: XCTestCase {
         }
 
         do {
-            _ = try await sut.fetchLast14DaysEUR()
+            _ = try await sut.fetchHistoricalPrices(days: 14)
             XCTFail("Expected network error")
         } catch {
             XCTAssertTrue((error as? URLError)?.code == .notConnectedToInternet)

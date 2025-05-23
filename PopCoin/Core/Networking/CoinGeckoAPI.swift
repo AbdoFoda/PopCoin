@@ -20,11 +20,13 @@ final class CoinGeckoAPI: CoinGeckoAPIProtocol {
         self.currency = currency
     }
 
-    func fetchLast14DaysEUR() async throws -> [BitcoinDayPrice] {
+    func fetchHistoricalPrices(
+        days: Int
+    ) async throws -> [CoinDayPrice] {
         guard let url = CoinGeckoEndpoint.marketChartURL(
             coinID: coinID,
             currency: currency,
-            days: 14
+            days: days
         ) else {
             throw NetworkError.invalidURL
         }
@@ -34,7 +36,8 @@ final class CoinGeckoAPI: CoinGeckoAPIProtocol {
         return decoded.toDayPriceList()
     }
 
-    func fetchPrice(for date: Date) async throws -> BitcoinMultiCurrencyPrice {
+
+    func fetchPrice(for date: Date) async throws -> CoinMultiCurrencyPrice {
         guard let url = CoinGeckoEndpoint.historicalPriceURL(
             date: date,
             coinID: coinID
@@ -46,7 +49,7 @@ final class CoinGeckoAPI: CoinGeckoAPIProtocol {
         let decoded = try JSONDecoder().decode(HistoricalPriceResponse.self, from: data)
 
         let current = decoded.market_data.current_price
-        return BitcoinMultiCurrencyPrice(
+        return CoinMultiCurrencyPrice(
             date: date,
             eur: current[CoinGeckoConstants.Currency.eur] ?? 0,
             usd: current[CoinGeckoConstants.Currency.usd] ?? 0,
