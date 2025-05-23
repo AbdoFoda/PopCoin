@@ -8,6 +8,7 @@
 import Foundation
 
 protocol CoinGeckoAPIProtocol {
-    func fetchLast14DaysEUR() async throws -> [BitcoinDayPrice]
-    func fetchPrice(for date: Date) async throws -> BitcoinMultiCurrencyPrice
+    func fetchHistoricalPrices(days: Int) async throws -> [CoinDayPrice]
+    func fetchPrice(for date: Date) async throws -> CoinMultiCurrencyPrice
 }
+

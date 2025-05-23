@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct BitcoinMultiCurrencyPrice {
+struct CoinMultiCurrencyPrice {
     let date: Date
     let eur: Double
     let usd: Double

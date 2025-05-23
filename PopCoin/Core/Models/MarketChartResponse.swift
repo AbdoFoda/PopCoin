@@ -9,12 +9,12 @@ import Foundation
 struct MarketChartResponse: Decodable {
     let prices: [[Double]]
     
-    func toDayPriceList() -> [BitcoinDayPrice] {
+    func toDayPriceList() -> [CoinDayPrice] {
         prices.compactMap { pair in
             guard pair.count == 2 else { return nil }
             // convert ms to seconds
             let date = Date(timeIntervalSince1970: pair[0] / 1000)
-            return BitcoinDayPrice(date: date, priceEUR: pair[1])
+            return CoinDayPrice(date: date, priceEUR: pair[1])
         }
     }
 }
