@@ -31,7 +31,7 @@ final class CoinGeckoIntegrationTests: XCTestCase {
 
     func testFetchPriceOnSpecificDate_liveAPI_returnsValidPrice() async throws {
         // Use a valid past date (Coingecko requires past data)
-        let formatter = DateFormatter.coinGecko
+        let formatter = DateFormatter.recentDates
         guard let date = formatter.date(from: "20-05-2025") else {
             XCTFail("Failed to create test date")
             return
