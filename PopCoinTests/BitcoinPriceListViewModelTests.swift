@@ -15,7 +15,7 @@ final class BitcoinPriceListViewModelTests: XCTestCase {
         let mockAPI = MockCoinGeckoAPI()
         let viewModel = BitcoinPriceListViewModel(api: mockAPI, numberOfDays: 14)
 
-        XCTAssertTrue(viewModel.prices.isEmpty)
+        XCTAssertTrue(viewModel.priceHistory.isEmpty)
         XCTAssertFalse(viewModel.isLoading)
         XCTAssertNil(viewModel.errorMessage)
     }
@@ -29,7 +29,7 @@ final class BitcoinPriceListViewModelTests: XCTestCase {
 
         await viewModel.fetchPrices()
 
-        XCTAssertEqual(viewModel.prices.count, 1)
+        XCTAssertEqual(viewModel.priceHistory.count, 1)
         XCTAssertFalse(viewModel.isLoading)
         XCTAssertNil(viewModel.errorMessage)
     }
@@ -41,7 +41,7 @@ final class BitcoinPriceListViewModelTests: XCTestCase {
 
         await viewModel.fetchPrices()
 
-        XCTAssertTrue(viewModel.prices.isEmpty)
+        XCTAssertTrue(viewModel.priceHistory.isEmpty)
         XCTAssertFalse(viewModel.isLoading)
         XCTAssertNotNil(viewModel.errorMessage)
     }

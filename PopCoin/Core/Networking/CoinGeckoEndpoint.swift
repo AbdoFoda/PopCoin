@@ -22,7 +22,7 @@ enum CoinGeckoEndpoint {
         date: Date,
         coinID: String
     ) -> URL? {
-        let dateString = DateFormatter.coinGecko.string(from: date)
+        let dateString = DateFormatter.recentDates.string(from: date)
         let path = "/coins/\(coinID)/history?date=\(dateString)&localization=false"
         return URL(string: CoinGeckoConstants.baseURL + path)
     }

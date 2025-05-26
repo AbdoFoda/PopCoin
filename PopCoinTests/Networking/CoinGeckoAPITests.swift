@@ -24,7 +24,7 @@ final class CoinGeckoAPITests: XCTestCase {
         sut = CoinGeckoAPI(session: session,
                            coinID: CoinGeckoConstants.Coin.bitcoin,
                            currency: CoinGeckoConstants.Currency.eur
-        ) // Injected session for testing
+        ) 
     }
 
     override func tearDown() {

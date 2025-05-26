@@ -13,3 +13,28 @@ struct CoinDayPrice: Identifiable {
     let date: Date
     let priceEUR: Double
 }
+
+extension CoinDayPrice {
+    var formattedDate: String {
+        DateFormatter.recentDates.string(from: date)
+    }
+
+    var formattedPrice: String {
+        String(format: "€%.2f", priceEUR)
+    }
+    
+    var formattedRelativeDate: String {
+        let calendar = Calendar.current
+        return calendar.isDateInToday(date) ? "Today" : formattedDate
+    }
+    
+    var formattedTime: String {
+        let calendar = Calendar.current
+        
+        let sameMinute = calendar.component(.minute, from: date) == calendar.component(.minute, from: .now)
+        && calendar.isDate(date, equalTo: .now, toGranularity: .hour)
+        
+        return sameMinute ? "just now" : DateFormatter.recentTime.string(from: date)
+    }
+}
+
