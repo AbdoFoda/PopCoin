@@ -14,7 +14,7 @@ protocol BitcoinPriceListViewModelProtocol: ObservableObject {
     var todayPrice: CoinDayPrice? { get }
     var isLoading: Bool { get }
     var errorMessage: String? { get }
-    
+    var isLoadingTodayPrice: Bool { get }
     func fetchData() async
     func fetchData(days: Int) async
     /// Fetches  historical coin prices from the API.

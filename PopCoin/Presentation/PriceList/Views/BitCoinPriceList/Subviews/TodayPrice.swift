@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TodayPrice<ViewModel: BitcoinPriceListViewModelProtocol>: View {
-    var viewModel: ViewModel
+    @ObservedObject var viewModel: ViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -20,16 +20,22 @@ struct TodayPrice<ViewModel: BitcoinPriceListViewModelProtocol>: View {
                     .font(.footnote)
                     .foregroundColor(.secondary)
             }else {
-                Text("Today price is not available")
+                Text("Today price is being loaded...")
             }
            
             Button {
-                Task {
+                Task { @MainActor in
                     await viewModel.refresh()
                 }
             } label: {
-                Image(systemName: "arrow.clockwise")
+                if viewModel.isLoadingTodayPrice {
+                    ProgressView()
+                }else {
+                    Image(systemName: "arrow.clockwise")
+                }
             }
+            .buttonStyle(.plain)
+            .contentShape(.rect)
 
         }
         .padding(.vertical, 8)

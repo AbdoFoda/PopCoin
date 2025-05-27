@@ -15,9 +15,11 @@ final class BitcoinPriceListViewModel: BitcoinPriceListViewModelProtocol {
     @Published private(set) var todayPrice: CoinDayPrice?
     @Published private(set) var isLoading = false
     @Published private(set) var errorMessage: String?
-    
+    @Published private(set) var isLoadingTodayPrice = false
     private let historicalPriceService: HistoricalPriceService
+    
     private let numberOfDays: Int
+    private var cancellables = Set<AnyCancellable>()
 
     init(
         historicalPriceService: HistoricalPriceService,
@@ -25,25 +27,33 @@ final class BitcoinPriceListViewModel: BitcoinPriceListViewModelProtocol {
     ) {
         self.historicalPriceService = historicalPriceService
         self.numberOfDays = numberOfDays
+        self.setupAutoRefresh()
+    }
+    
+    private func setupAutoRefresh() {
+        Timer
+            .publish(every: 60, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                Task {
+                    await self?.refresh()
+                }
+            }
+            .store(in: &cancellables)
     }
     
     func fetchData(days: Int) async {
+        guard isLoading == false else { return }
         isLoading = true
+        defer { isLoading = false }
         errorMessage = nil
         do {
-            var prices: [CoinDayPrice] = try await fetchPricesInBackground(days: days)
+            var prices: [CoinDayPrice] = try await fetchPrices(days: days)
             todayPrice = prices.removeFirst()
             priceHistory = prices
         } catch {
             errorMessage = error.localizedDescription
         }
-        isLoading = false
-    }
-    
-    internal func fetchPricesInBackground(days: Int) async throws-> [CoinDayPrice] {
-        try await Task.detached(priority: .userInitiated) {
-            try await self.fetchPrices(days: days)
-        }.value
     }
     
     internal func fetchPrices(days: Int) async throws -> [CoinDayPrice] {
@@ -52,12 +62,13 @@ final class BitcoinPriceListViewModel: BitcoinPriceListViewModelProtocol {
     
     
     func refresh() async {
-        isLoading = true
+        guard isLoadingTodayPrice == false else { return }
+        isLoadingTodayPrice = true
+        defer { isLoadingTodayPrice = false }
         do {
-            todayPrice = try await fetchPricesInBackground(days: 0).first
+            todayPrice = try await fetchPrices(days: 0).first
         } catch {
             errorMessage = error.localizedDescription
         }
-        isLoading = false
     }
 }

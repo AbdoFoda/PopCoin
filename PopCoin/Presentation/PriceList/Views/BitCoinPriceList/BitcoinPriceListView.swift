@@ -31,9 +31,9 @@ struct BitcoinPriceListView<ViewModel: BitcoinPriceListViewModelProtocol>: View 
                             await viewModel.fetchData()
                         }
                     }
-                } else {
-                    mainContent
                 }
+                mainContent
+                
             }
             .padding(.horizontal)
             .task {
