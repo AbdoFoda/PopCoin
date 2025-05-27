@@ -15,13 +15,7 @@ extension CoinGeckoAPI: FetchPriceRepo {
         ) else {
             throw NetworkError.invalidURL
         }
-        var request = URLRequest(url: url)
-        request = authRequest(request: request)
-        request.timeoutInterval = 10
-        let (data, _) = try await session.data(for: request)
-        let decoded = try JSONDecoder().decode(HistoricalPriceResponse.self, from: data)
-
-        return  decoded.market_data
+        return try await request(HistoricalPriceResponse.self, from: url).market_data
     }
 }
 
