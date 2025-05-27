@@ -7,12 +7,19 @@
 import Foundation
 
 final class FetchPriceService: FetchPriceServiceProtocol {
-    static let shared = FetchPriceService()
-    internal init() {}
+    var fetchPriceRepo: FetchPriceRepo
+
+    static let shared = FetchPriceService(fetchPriceRepo: CoinGeckoAPI.shared)
+    internal init(fetchPriceRepo: FetchPriceRepo) {
+        self.fetchPriceRepo = fetchPriceRepo
+    }
     
     func fetchPrice(for date: Date) async throws -> CoinMultiCurrencyPrice {
-        let prices = try await CoinGeckoAPI.shared.fetchPrice(for: date)
-        let filterdPrices = prices.current_price.filter{ CoinGeckoConstants.Currency.allCurrencies.map{$0.rawValue}.contains($0.key)
+        let prices = try await fetchPriceRepo.fetchPrice(for: date)
+        guard let market_data = prices.market_data else {
+            throw FetchPriceServiceError.noData
+        }
+        let filterdPrices = market_data.current_price.filter{ CoinGeckoConstants.Currency.allCurrencies.map{$0.rawValue}.contains($0.key)
         }
         if filterdPrices.count == 0 {
             throw FetchPriceServiceError.noData

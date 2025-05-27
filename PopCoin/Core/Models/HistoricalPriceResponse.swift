@@ -10,5 +10,5 @@ struct HistoricalPriceResponse: Decodable {
     struct MarketData: Decodable {
         let current_price: [String: Double]
     }
-    let market_data: MarketData
+    let market_data: MarketData?
 }

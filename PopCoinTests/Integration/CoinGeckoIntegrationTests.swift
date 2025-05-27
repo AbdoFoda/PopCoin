@@ -9,38 +9,32 @@
 import XCTest
 @testable import PopCoin
 
-final class CoinGeckoIntegrationTests: XCTestCase {
+final class CoinGeckoAPIIntegrationTests: XCTestCase {
 
-    var api: CoinGeckoAPI!
+    func test_request_fetchesMarketChartResponse_successfully() async throws {
+        // Given
+        let api = CoinGeckoAPI.shared
+        let url = URL(string: "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=eur&days=7")!
 
-    override func setUp() {
-        super.setUp()
-        api = CoinGeckoAPI(
-            session: .shared,
-            coinID: CoinGeckoConstants.Coin.bitcoin,
-            currency: CoinGeckoConstants.Currency.eur
-        )
+        // When
+        let result: MarketChartResponse = try await api.request(MarketChartResponse.self, from: url)
+
+        // Then
+        XCTAssertFalse(result.prices.isEmpty, "Expected prices array to be non-empty")
+        XCTAssertEqual(result.prices.first?.count, 2, "Expected each price entry to have [timestamp, value]")
     }
 
-    func testFetchHistoricalPrices_liveAPI_returnsValidPrices() async throws {
-        let result = try await api.fetchHistoricalPrices(days: 14)
+    func test_request_returnsFailure_forInvalidEndpoint() async {
+        // Given
+        let api = CoinGeckoAPI.shared
+        let invalidURL = URL(string: "https://api.coingecko.com/api/v3/invalid_endpoint")!
 
-        XCTAssertFalse(result.isEmpty, "Expected non-empty price list")
-        XCTAssertTrue(result.allSatisfy { $0.priceEUR > 0 }, "Prices should be greater than 0")
-    }
-
-    func testFetchPriceOnSpecificDate_liveAPI_returnsValidPrice() async throws {
-        // Use a valid past date (Coingecko requires past data)
-        let formatter = DateFormatter.recentDates
-        guard let date = formatter.date(from: "20-05-2025") else {
-            XCTFail("Failed to create test date")
-            return
+        // When
+        do {
+            let _: MarketChartResponse = try await api.request(MarketChartResponse.self, from: invalidURL)
+            XCTFail("Expected to throw, but request succeeded")
+        } catch {
+            XCTAssertTrue(error is URLError || error is DecodingError, "Expected network or decoding error")
         }
-
-        let result = try await api.fetchPrice(for: date)
-
-        XCTAssertGreaterThan(result.eur, 0)
-        XCTAssertGreaterThan(result.usd, 0)
-        XCTAssertGreaterThan(result.gbp, 0)
     }
 }

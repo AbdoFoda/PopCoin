@@ -16,13 +16,13 @@ final class BitcoinPriceListViewModel: BitcoinPriceListViewModelProtocol {
     @Published private(set) var isLoading = false
     @Published private(set) var errorMessage: String?
     @Published private(set) var isLoadingTodayPrice = false
-    private let historicalPriceService: HistoricalPriceService
+    private let historicalPriceService: HistoricalPriceServiceProtocol
     
     private let numberOfDays: Int
     private var cancellables = Set<AnyCancellable>()
 
     init(
-        historicalPriceService: HistoricalPriceService,
+        historicalPriceService: HistoricalPriceServiceProtocol,
         numberOfDays: Int
     ) {
         self.historicalPriceService = historicalPriceService
