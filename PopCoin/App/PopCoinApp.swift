@@ -9,10 +9,9 @@ import SwiftUI
 
 @main
 struct PopCoinApp: App {
-    private let viewFactory: ViewFactory = .init()
     var body: some Scene {
         WindowGroup {
-            viewFactory.makeBitcoinPriceListView()
+            ViewFactory.shared.makeBitcoinPriceListView()
         }
     }
 }

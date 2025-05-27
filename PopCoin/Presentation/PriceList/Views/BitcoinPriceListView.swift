@@ -65,7 +65,7 @@ struct BitcoinPriceListView<ViewModel: BitcoinPriceListViewModelProtocol>: View 
     private var historicalData: some View {
         ForEach(viewModel.priceHistory) { price in
             NavigationLink {
-                //                                BitcoinPriceDetailView(date: price.date)
+                ViewFactory.shared.makePriceDetailsView(for: price.date)
             } label: {
                 HStack {
                     Text(price.formattedRelativeDate)

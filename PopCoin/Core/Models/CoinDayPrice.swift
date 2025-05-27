@@ -20,7 +20,7 @@ extension CoinDayPrice {
     }
 
     var formattedPrice: String {
-        String(format: "€%.2f", priceEUR)
+        "€\(priceEUR.formattedPrice)"
     }
     
     var formattedRelativeDate: String {
