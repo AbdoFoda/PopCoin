@@ -17,7 +17,7 @@ internal final class HistoricalPriceService: HistoricalPriceServiceProtocol {
     )
     
     internal init(
-        pricesNormalizer: PricesNormalizer,
+        pricesNormalizer: PricesNormalizerProtocol,
         priceRepository: HistoricalPricesRepo
     ) {
         self.pricesNormalizer = pricesNormalizer
