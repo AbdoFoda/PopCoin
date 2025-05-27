@@ -9,10 +9,35 @@
 enum CoinGeckoConstants {
     static let baseURL = "https://api.coingecko.com/api/v3"
 
-    enum Currency {
-        static let eur = "eur"
-        static let usd = "usd"
-        static let gbp = "gbp"
+    enum Currency: String {
+        case eur = "eur"
+        case usd = "usd"
+        case gbp = "gbp"
+        static let allCurrencies: [Currency] = [
+            eur,
+            usd,
+            gbp
+        ]
+        var symbol: String {
+            switch self{
+            case .eur:
+                "€"
+            case .usd:
+                "$"
+            case .gbp:
+                "£"
+            }
+        }
+        var presentationValue: String {
+            switch self{
+            case .eur:
+                "Euro"
+            case .usd:
+                "US Dollar"
+            case .gbp:
+                "Pound Sterling"
+            }
+        }
     }
 
     enum Coin {

@@ -11,7 +11,12 @@ internal final class HistoricalPriceService: HistoricalPriceServiceProtocol {
     var pricesNormalizer: PricesNormalizerProtocol
     var priceRepository: HistoricalPricesRepo
     
-    init(
+    static let shared = HistoricalPriceService(
+        pricesNormalizer: PricesNormalizer(),
+        priceRepository: CoinGeckoAPI.shared
+    )
+    
+    internal init(
         pricesNormalizer: PricesNormalizer,
         priceRepository: HistoricalPricesRepo
     ) {

@@ -17,7 +17,7 @@ final class CoinGeckoAPI: CoinGeckoAPIProtocol {
     static let shared = CoinGeckoAPI(
         session: .shared,
         coinID: AppConfig.defaultCoin,
-        currency: AppConfig.defaultCurrency,
+        currency: AppConfig.defaultCurrency.rawValue,
         apiKey: APIKeys.coinGecko,
         apiKEyHeader: APIKeys.APIKeyHeader
     )

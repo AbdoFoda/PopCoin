@@ -10,7 +10,5 @@ import Foundation
 
 struct CoinMultiCurrencyPrice {
     let date: Date
-    let eur: Double
-    let usd: Double
-    let gbp: Double
+    let prices: [CoinCurrencyPrice]
 }
