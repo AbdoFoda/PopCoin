@@ -15,8 +15,13 @@ extension CoinGeckoAPI: HistoricalPricesRepo {
         ) else {
             throw NetworkError.invalidURL
         }
+        
 
-        let (data, _) = try await session.data(from: url)
+        var request = URLRequest(url: url)
+        request = authRequest(request: request)
+        request.timeoutInterval = 10
+        let (data, _) = try await session.data(for: request)
+        
         return try JSONDecoder().decode(MarketChartResponse.self, from: data)
     }
 }

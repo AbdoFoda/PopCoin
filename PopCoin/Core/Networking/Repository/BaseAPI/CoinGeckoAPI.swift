@@ -24,4 +24,10 @@ final class CoinGeckoAPI: CoinGeckoAPIProtocol {
         self.coinID = coinID
         self.currency = currency
     }
+    
+    func authRequest(request: URLRequest) -> URLRequest {
+        var request = request
+        request.setValue(APIKeys.coinGecko, forHTTPHeaderField: "x-cg-demo-api-key")
+        return request
+    }
 }
