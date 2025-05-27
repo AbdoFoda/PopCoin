@@ -7,5 +7,5 @@
 import Foundation
 
 protocol FetchPriceRepo {
-    func fetchPrice(for date: Date) async throws -> HistoricalPriceResponse.MarketData
+    func fetchPrice(for date: Date) async throws -> HistoricalPriceResponse
 }

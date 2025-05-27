@@ -15,3 +15,4 @@ final class MockFetchPriceService: FetchPriceServiceProtocol {
         try result.get()
     }
 }
+

@@ -8,14 +8,14 @@
 import Foundation
 
 extension CoinGeckoAPI: FetchPriceRepo {
-    func fetchPrice(for date: Date) async throws -> HistoricalPriceResponse.MarketData {
+    func fetchPrice(for date: Date) async throws -> HistoricalPriceResponse {
         guard let url = CoinGeckoEndpoint.historicalPriceURL(
             date: date,
             coinID: coinID
         ) else {
             throw NetworkError.invalidURL
         }
-        return try await request(HistoricalPriceResponse.self, from: url).market_data
+        return try await request(HistoricalPriceResponse.self, from: url)
     }
 }
 
