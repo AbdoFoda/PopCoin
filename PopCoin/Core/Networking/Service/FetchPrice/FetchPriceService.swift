@@ -7,8 +7,12 @@
 import Foundation
 
 final class FetchPriceService: FetchPriceServiceProtocol {
-    static let shared = FetchPriceService()
-    internal init() {}
+    var apiClient: CoinGeckoAPIProtocol
+
+    static let shared = FetchPriceService(apiClient: CoinGeckoAPI.shared)
+    internal init(apiClient: CoinGeckoAPIProtocol) {
+        self.apiClient = apiClient
+    }
     
     func fetchPrice(for date: Date) async throws -> CoinMultiCurrencyPrice {
         let prices = try await CoinGeckoAPI.shared.fetchPrice(for: date)
