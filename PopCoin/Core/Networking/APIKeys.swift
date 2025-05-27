@@ -8,4 +8,5 @@
 enum APIKeys {
     //TODO:  should be encrypted
     static let coinGecko = "CG-HU1PrBqmGkkxzNYrBeMqTY33"
+    static let APIKeyHeader = "x-cg-demo-api-key"
 }
