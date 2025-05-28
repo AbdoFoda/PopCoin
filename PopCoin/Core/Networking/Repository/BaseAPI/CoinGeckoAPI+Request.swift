@@ -19,7 +19,11 @@ extension CoinGeckoAPI: CoinGeckoAPIProtocol{
         let request = buildRequest(for: url)
         let (data, response) = try await session.data(for: request)
         try handleResponseErrorIfAny(response,data: data)
-        return try JSONDecoder().decode(T.self, from: data)
+        do {
+            return try JSONDecoder().decode(T.self, from: data)
+        } catch let error as DecodingError {
+            throw NetworkError.decodingError(error)
+        }
     }
     
     internal func handleResponseErrorIfAny(_ response: URLResponse,data: Data) throws {

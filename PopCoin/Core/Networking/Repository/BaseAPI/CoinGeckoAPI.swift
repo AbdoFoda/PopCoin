@@ -19,19 +19,19 @@ final class CoinGeckoAPI {
         coinID: AppConfig.defaultCoin,
         currency: AppConfig.defaultCurrency.rawValue,
         apiKey: APIKeys.coinGecko,
-        apiKEyHeader: APIKeys.APIKeyHeader
+        apiKeyHeader: APIKeys.APIKeyHeader
     )
     
     internal init(session: URLSession,
                   coinID: String,
                   currency: String,
                   apiKey: String,
-                  apiKEyHeader: String
+                  apiKeyHeader: String
     ) {
         self.session = session
         self.coinID = coinID
         self.currency = currency
         self.apiKey = apiKey
-        self.apiKeyHeader = apiKEyHeader
+        self.apiKeyHeader = apiKeyHeader
     }    
 }
