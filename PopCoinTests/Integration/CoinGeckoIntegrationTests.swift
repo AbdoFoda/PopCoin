@@ -33,8 +33,13 @@ final class CoinGeckoAPIIntegrationTests: XCTestCase {
         do {
             let _: MarketChartResponse = try await api.request(MarketChartResponse.self, from: invalidURL)
             XCTFail("Expected to throw, but request succeeded")
+        } catch let error as NetworkError{
+            guard case .invalidURL = error else {
+                return
+            }
+            XCTFail("Expected Invalid URL error but got another NetworkError: \(error)")
         } catch {
-            XCTAssertTrue(error is URLError || error is DecodingError, "Expected network or decoding error")
+            XCTFail("Unhandled error: \(error)")
         }
     }
 }
